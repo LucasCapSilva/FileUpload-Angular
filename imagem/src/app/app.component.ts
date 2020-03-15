@@ -17,6 +17,7 @@ const MIME_TYPES = {
 })
 export class AppComponent {
   selectedFile: File = null;
+  image:any;
   constructor(private http: HttpClient, private service: FileDownloadService) { }
 
   ngOnInit() {

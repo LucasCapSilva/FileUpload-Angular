@@ -24,6 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.feiraBrasil.IFeiraAPI.data.vo.v1.UploadFileResponseVO;
+import com.feiraBrasil.IFeiraAPI.model.Categoria;
+import com.feiraBrasil.IFeiraAPI.model.Feirante;
+import com.feiraBrasil.IFeiraAPI.repository.CategoriaRepository;
+import com.feiraBrasil.IFeiraAPI.service.CategoriaService;
+import com.feiraBrasil.IFeiraAPI.service.FeiranteService;
 import com.feiraBrasil.IFeiraAPI.service.impl.FileStorageService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -36,6 +41,9 @@ private static final Logger logger = LoggerFactory.getLogger(FileController.clas
 	@Autowired
 	private FileStorageService fileStorageService;
 	
+	@Autowired
+	private FeiranteService feiranteService;
+	
 	@PostMapping("/uploadFile")
 	public UploadFileResponseVO uploadFile(@RequestParam("file") MultipartFile file) {
 		String fileName = fileStorageService.storeFile(file);
@@ -45,6 +53,20 @@ private static final Logger logger = LoggerFactory.getLogger(FileController.clas
 				.path(fileName)
 				.toUriString();
 		
+		
+		return new UploadFileResponseVO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+	}
+	
+	@PostMapping("/uploadFile/{id}")
+	public UploadFileResponseVO uploadFileFeirante(@RequestParam("file") MultipartFile file,@PathVariable int id) {
+		String fileName = fileStorageService.storeFile(file);
+		Feirante feirante= feiranteService.getById(id);
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+				.path("/api/file/downloadFile/")
+				.path(fileName)
+				.toUriString();
+		feirante.setImagem(fileDownloadUri);
+		feiranteService.createOrUpdate(feirante);
 		
 		return new UploadFileResponseVO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
 	}
