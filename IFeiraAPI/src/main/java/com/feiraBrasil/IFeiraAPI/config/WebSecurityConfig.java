@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 .antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/file/**").permitAll()               
+                .antMatchers("/api/file/**").permitAll() 
                 .anyRequest().authenticated().and().cors();
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.headers().cacheControl();

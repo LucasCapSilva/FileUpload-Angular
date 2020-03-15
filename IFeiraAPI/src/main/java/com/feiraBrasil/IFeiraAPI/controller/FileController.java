@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.feiraBrasil.IFeiraAPI.data.vo.v1.UploadFileResponseVO;
 import com.feiraBrasil.IFeiraAPI.service.impl.FileStorageService;
 
-
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/file")
 public class FileController {
@@ -41,9 +41,10 @@ private static final Logger logger = LoggerFactory.getLogger(FileController.clas
 		String fileName = fileStorageService.storeFile(file);
 		
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-				.path("/Users/DELL/Desktop/ifeira/IFeira-Jwt/IFeiraAPI/upload")
+				.path("/api/file/downloadFile/")
 				.path(fileName)
 				.toUriString();
+		
 		
 		return new UploadFileResponseVO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
 	}
