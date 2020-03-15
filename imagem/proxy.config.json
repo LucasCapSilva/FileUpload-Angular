@@ -1,0 +1,8 @@
+{
+    "/server":{
+        "target": "http://localhost:9000/",
+        "pathRewrite":{
+            "^/server":""
+        }
+    }
+}
